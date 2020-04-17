@@ -58,7 +58,7 @@
 // TODO: Implement the LRUCacheItem class here
 class LRUCacheItem {
   constructor(val = null, key = null) {
-      this.val = new ListNode(val)
+      this.val = val
       this.key = key
   }
 }
@@ -69,6 +69,7 @@ class LRUCache {
       this.list = new List()
       this.limit = limit
       this.hash = {}
+      this.length = 0
   }
 
   // TODO: Implement the size method here
@@ -78,7 +79,7 @@ class LRUCache {
 
   // TODO: Implement the get method here
   get(key) {
-    let node = this.hash[key].val
+    let node = this.hash[key].val.val
     if(node) this.list.moveToEnd(node)
     return node
   }
@@ -86,8 +87,11 @@ class LRUCache {
   // TODO: Implement the set method here
   set(key, val) {
     
-    this.hash[key] = this.list.push(val)
-    if(this.isFull) this.list.shift()
+    if(this.isFull) {
+
+      delete this.hash[this.list.shift().val.key]
+    }
+    this.hash[key] = this.list.push(LRUCacheItem(val, key))
   }
 
   isFull() {
